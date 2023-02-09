@@ -6,27 +6,13 @@
 /*   By: ylarhris <ylarhris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/05 11:58:38 by ylarhris          #+#    #+#             */
-/*   Updated: 2023/02/06 06:59:18 by ylarhris         ###   ########.fr       */
+/*   Updated: 2023/02/08 08:27:52 by ylarhris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "/Users/ylarhris/Desktop/pipex/Libft/libft.h"
-#include <stdio.h>
-#include<unistd.h>
-#include<fcntl.h>
+#include "pipex.h"
 
-size_t	ft_strlen(const char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-		i++;
-	return (i);
-}
-
-
-static int	ft_wdcount(char *str, char c)
+int	ft_wdcount(char *str, char c)
 {
 	int	i;
 	int	count;
@@ -44,7 +30,7 @@ static int	ft_wdcount(char *str, char c)
 	return (count);
 }
 
-static int	ft_lcount(int i, char *str, char sep)
+int	ft_lcount(int i, char *str, char sep)
 {
 	int	count;
 
@@ -59,7 +45,7 @@ static int	ft_lcount(int i, char *str, char sep)
 	return (count);
 }
 
-static char	*ft_filling(char *t__t, char *str, char sep, int i)
+char	*ft_filling(char *t__t, char *str, char sep, int i)
 {
 	int	j;
 	int	k;
@@ -123,97 +109,3 @@ char	**ft_split(char *str, char sep)
 	s_str[j] = NULL;
 	return (s_str);
 }
-
-char	*ft_strjoin(char const *s1, char const *s2)
-{
-	size_t	i;
-	size_t	j;
-	char	*j_str;
-
-	i = 0;
-	j = 0;
-	if (!s1 || !s2)
-		return (0);
-	j_str = (char *) malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
-	if (!j_str)
-		return (NULL);
-	while (s1[i])
-	{
-		j_str[i] = s1[i];
-		i++;
-	}
-	while (s2[j])
-	{
-		j_str[i + j] = s2[j];
-		j++;
-	}
-	j_str[i + j] = '\0';
-	return (j_str);
-}
-
-char *path(char *cmd, char **env)
-{
-    int		i;
-	char	*tmp;
-	char	*str;
-	char	**spliit;
-	char	*t__t;
-
-	i = 0;
-	while(env[i])
-	{
-		if(strnstr(env[i],"PATH=",5))
-			str = env[i] + 5;
-		i++;
-	}
-	spliit = ft_split(str, ':');
-	i = 0;
-	while (spliit[i])
-	{
-		tmp = ft_strjoin(spliit[i],"/");
-		t__t = ft_strjoin(tmp ,cmd);
-		if(access(t__t,X_OK) == 0)
-			return (t__t);
-		i++;
-	}
-	return (NULL);
-}
-void child1(int fd, char **av, char **env)
-{
-	char **args;
-	
-	dup2(fd,1);
-	args = ft_split(av[1],' ');
-	execve(av[1],args,env);
-	execve(path(args[0], env),args,env);
-}
-
-void child2(int to_close,int fd, char **av, char **env)
-{
-	char **args;
-		
-	close(to_close);
-	dup2(fd,0);
-	args = ft_split(av[2], ' ');
-	execve(av[2],args,env);
-	execve(path(args[0], env),args,env);
-	path(args[0], env);
-}
-
-int main(int ac, char **av, char **env)
-{
-	int 	T[2];
-	char	**args;
-	pid_t 	pid[2];
-	int		fd[2];
-
-	pipe(T);
-	pid[0] = fork();
-	if(!pid[0])
-		child1(T[1], av, env);
-	else
-		pid[1] = fork();
-		if(pid[1])
-			child2(T[1], T[0], av, env);
-}
-

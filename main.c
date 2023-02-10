@@ -14,7 +14,26 @@
 
 int main(int ac, char **av, char **env)
 {
-    t_pipex *cmd1;
-    t_pipex *cmd2;
+    pid_t child[2];
+    int    T[2];
 
+    pipe(T);
+    if (ac != 5)
+        write(1, "Bad Arguments", 14);
+    else
+    {
+        child[0] = fork();
+        if (!child[0])
+            firstchild(av,T,env);
+        else
+        {
+            child[1] = fork();
+            if (!child[1])
+                secondchild(av,T,env);
+        }
+    }
+    close(T[1]);
+    close(T[0]);
+    waitpid(child[0], NULL, 0);
+    waitpid(child[1], NULL, 0);
 }

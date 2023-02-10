@@ -33,4 +33,7 @@ char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strnstr(const char *src, const char *to_find, size_t n);
 char	*ft_paths(char **env);
 char	*ft_path(char *cmd, char **env);
+void	firstchild(char **av, int *T, char **env);
+void	secondchild(char **av, int *T, char **env);
+
 #endif

@@ -8,7 +8,7 @@ CC = cc
 
 RM = rm -rf
 
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror
 
 NONE	=	'\033[0m'
 GREEN	=	'\033[33m'
@@ -31,10 +31,14 @@ all		:	$(NAME)
 $(NAME)	:	$(OBJS)
 			@echo "     → Compiling $(NAME)..."
 			@$(CC) $(OBJS) -o $(NAME)
-			@echo ${GREEN}"***** ***** ***** ***** *** *    **** ****" 
+			@echo ${GREEN}"***** ***** ***** ***** *** *    **** ****"
+			@sleep 0.1
 			@echo ${GREEN}"*     *   * * * * *   *  *  *    *    *   *" 
-			@echo ${GREEN}"*     *   * * * * *****  *  *    **** *   *" 
+			@sleep 0.1
+			@echo ${GREEN}"*     *   * * * * *****  *  *    **** *   *"
+			@sleep 0.1
 			@echo ${GREEN}"*     *   * * * * *      *  *    *    *   *" 
+			@sleep 0.1
 			@echo ${GREEN}"***** ***** * * * *     *** **** **** ****" 
 
 

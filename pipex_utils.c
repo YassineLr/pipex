@@ -67,10 +67,10 @@ char	*ft_filling(char *t__t, char *str, char sep, int i)
 	return (t__t);
 }
 
-void ft_free(char **str)
+void	ft_free(char **str)
 {
-	int i;
-	
+	int	i;
+
 	i = 0;
 	while (str[i])
 	{
@@ -100,8 +100,6 @@ char	**ft_split(char *str, char sep)
 		if (str[i] != sep)
 		{
 			s_str[j] = ft_filling(s_str[j], str, sep, i);
-			if(!s_str[j])
-				ft_free(s_str);
 			j++;
 		}
 		i += ft_lcount(i, str, sep);
